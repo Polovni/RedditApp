@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Entry implements Serializable {
     @Element(name = "content")
     private String content;
-    @Element(name = "author")
+    @Element(required = false, name = "author")
     private String author;
     @Element(name = "id")
     private String id;
@@ -66,5 +66,17 @@ public class Entry implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "\n\nEntry{" +
+                "content='" + content + '\'' +
+                ", author='" + author + '\'' +
+                ", id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", updated='" + updated + '\'' +
+                '}' + "\n" +
+                "--------------------------------------------------------------------------\n";
     }
 }
