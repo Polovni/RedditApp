@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.redditapp.model.Feed;
 import com.example.redditapp.model.entry.Entry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,11 +39,9 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<Feed>() {
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
-                Log.d(TAG, "onResponse: feed: " + response.body().toString());
-
                 List<Entry> entries = response.body().getEntries();
 
-                Log.d(TAG, "onResponse: Server Response: " + response.body().getEntries());
+                ArrayList<Post> posts = new ArrayList<>();
 
                 for(int i = 0; i < entries.size(); i++) {
                     ExtractXML extractXML1 = new ExtractXML("<a href=", entries.get(0).getContent());
@@ -58,8 +57,24 @@ public class MainActivity extends AppCompatActivity {
                         postContent.add(null);
                         Log.e(TAG, "onResponse: IndexOutOfBoundsException(thumbnail): " + e.getMessage());
                     }
+                    int lastIndex = postContent.size() - 1;
+                    posts.add(new Post(
+                            entries.get(i).getTitle(),
+                            entries.get(i).getAuthor().getName(),
+                            entries.get(i).getUpdated(),
+                            postContent.get(0),
+                            postContent.get(lastIndex)
+                    ));
                 }
 
+                for(int j = 0; j < posts.size(); j++) {
+                    Log.d(TAG, "onResponse: \n" +
+                            "PostURL: " + posts.get(j).getPostURL() + "\n " +
+                            "ThumbnailURL: " + posts.get(j).getThumbnailURL() + "\n " +
+                            "Title: " + posts.get(j).getTitle() + "\n " +
+                            "Author: " + posts.get(j).getAuthor() + "\n " +
+                            "updated: " + posts.get(j).getDate_updated() + "\n ");
+                }
             }
 
             @Override
