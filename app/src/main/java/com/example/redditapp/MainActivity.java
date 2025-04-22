@@ -6,6 +6,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.redditapp.model.Feed;
+import com.example.redditapp.model.entry.Entry;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +39,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 Log.d(TAG, "onResponse: feed: " + response.body().toString());
-                Log.d(TAG, "onResponse: Server Response: " + response.toString());
+
+                List<Entry> entries = response.body().getEntries();
+
+                Log.d(TAG, "onResponse: Server Response: " + response.body().getEntries());
+
+                for(int i = 0; i < entries.size(); i++) {
+                    ExtractXML extractXML1 = new ExtractXML("<a href=", entries.get(0).getContent());
+                    List<String> postContent = extractXML1.start();
+
+                    ExtractXML extractXML2 = new ExtractXML("<img src=", entries.get(0).getContent());
+                    try {
+                        postContent.add(extractXML2.start().get(0));
+                    } catch (NullPointerException e) {
+                        postContent.add(null);
+                        Log.e(TAG, "onResponse: NullPointerException(thumbnail): " + e.getMessage());
+                    } catch (IndexOutOfBoundsException e) {
+                        postContent.add(null);
+                        Log.e(TAG, "onResponse: IndexOutOfBoundsException(thumbnail): " + e.getMessage());
+                    }
+                }
+
             }
 
             @Override
