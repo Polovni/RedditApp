@@ -1,5 +1,7 @@
 [versions]
 agp = "8.9.1"
+cardview = "1.0.0"
+constraintlayout = "2.2.1"
 converterSimplexml = "latest.version"
 converterSimplexmlVersion = "2.11.0"
 kotlin = "2.0.21"
@@ -12,8 +14,11 @@ activityCompose = "1.8.0"
 composeBom = "2024.09.00"
 retrofit = "2.11.0"
 appcompat = "1.7.0"
+universalImageLoader = "1.9.5"
 
 [libraries]
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 converter-simplexml = { module = "com.squareup.retrofit2:converter-simplexml", version.ref = "converterSimplexml" }
 converter-simplexml-v2110 = { module = "com.squareup.retrofit2:converter-simplexml", version.ref = "converterSimplexmlVersion" }
@@ -32,6 +37,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+universal-image-loader = { module = "com.nostra13.universalimageloader:universal-image-loader", version.ref = "universalImageLoader" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

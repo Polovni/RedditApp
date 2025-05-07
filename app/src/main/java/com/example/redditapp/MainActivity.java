@@ -2,6 +2,7 @@ package com.example.redditapp;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,38 +44,45 @@ public class MainActivity extends AppCompatActivity {
 
                 ArrayList<Post> posts = new ArrayList<>();
 
-                for(int i = 0; i < entries.size(); i++) {
-                    ExtractXML extractXML1 = new ExtractXML("<a href=", entries.get(0).getContent());
+                for (int i = 0; i < entries.size(); i++) {
+                    ExtractXML extractXML1 = new ExtractXML("<a href=", entries.get(i).getContent());
                     List<String> postContent = extractXML1.start();
 
-                    ExtractXML extractXML2 = new ExtractXML("<img src=", entries.get(0).getContent());
-                    try {
-                        postContent.add(extractXML2.start().get(0));
-                    } catch (NullPointerException e) {
+                    ExtractXML extractXML2 = new ExtractXML("<img src=", entries.get(i).getContent());
+                    List<String> thumbnails = extractXML2.start();
+
+                    // Add thumbnail if it exists
+                    if (!thumbnails.isEmpty()) {
+                        postContent.add(thumbnails.get(0));
+                    } else {
                         postContent.add(null);
-                        Log.e(TAG, "onResponse: NullPointerException(thumbnail): " + e.getMessage());
-                    } catch (IndexOutOfBoundsException e) {
-                        postContent.add(null);
-                        Log.e(TAG, "onResponse: IndexOutOfBoundsException(thumbnail): " + e.getMessage());
+                        Log.d(TAG, "onResponse: No thumbnail found for entry " + i);
                     }
+
                     int lastIndex = postContent.size() - 1;
+
                     posts.add(new Post(
                             entries.get(i).getTitle(),
                             entries.get(i).getAuthor().getName(),
                             entries.get(i).getUpdated(),
-                            postContent.get(0),
-                            postContent.get(lastIndex)
+                            postContent.get(0),         // Post URL
+                            postContent.get(lastIndex)  // Thumbnail URL
                     ));
                 }
+
 
                 for(int j = 0; j < posts.size(); j++) {
                     Log.d(TAG, "onResponse: \n" +
                             "PostURL: " + posts.get(j).getPostURL() + "\n " +
                             "ThumbnailURL: " + posts.get(j).getThumbnailURL() + "\n " +
                             "Title: " + posts.get(j).getTitle() + "\n " +
-                            "Author: " + posts.get(j).getAuthor() + "\n " +
+                           "Author: " + posts.get(j).getAuthor() + "\n " +
                             "updated: " + posts.get(j).getDate_updated() + "\n ");
                 }
+
+                ListView listView = (ListView) findViewById(R.id.listView);
+                com.example.redditapp.CustomListAdapter customListAdapter = new com.example.redditapp.CustomListAdapter(MainActivity.this, R.layout.card_layout_main, posts);
+                listView.setAdapter(customListAdapter);
             }
 
             @Override

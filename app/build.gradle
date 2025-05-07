@@ -56,4 +56,7 @@ dependencies {
     debugImplementation libs.androidx.ui.test.manifest
     implementation libs.retrofit
     implementation libs.converter.simplexml.v2110
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.cardview
+    implementation libs.universal.image.loader
 }
