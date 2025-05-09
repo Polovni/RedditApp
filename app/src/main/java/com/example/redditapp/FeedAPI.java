@@ -9,6 +9,11 @@ import retrofit2.http.Path;
 public interface FeedAPI {
     String BASE_URL = "https://www.reddit.com/r/";
 
-    @GET("earthporn/.rss")
-    Call<Feed> getFeed();
+    // Non-static feed name
+    @GET("{feed_name}/.rss")
+    Call<Feed> getFeed(@Path("feed_name") String feed_name);
+
+    // Static feed name
+//    @GET("earthporn/.rss")
+//    Call<Feed> getFeed();
 }
